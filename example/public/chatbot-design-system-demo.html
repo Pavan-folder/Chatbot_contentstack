@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Design System Demo</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .demo-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .demo-header h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .demo-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin: 10px 0 0 0;
+        }
+
+        .demo-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.2);
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .demo-section h2 {
+            color: white;
+            font-size: 1.8rem;
+            margin: 0 0 20px 0;
+            text-align: center;
+        }
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .component-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .component-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .component-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin: 0 0 10px 0;
+            text-align: center;
+        }
+
+        .component-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 0 0 15px 0;
+            text-align: center;
+        }
+
+        .theme-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .theme-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .theme-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.05);
+        }
+
+        .theme-btn.active {
+            background: rgba(255,255,255,0.4);
+            font-weight: 600;
+        }
+
+        .features-list {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .features-list h3 {
+            color: #333;
+            margin: 0 0 20px 0;
+            text-align: center;
+            font-size: 1.5rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-item {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feature-item h4 {
+            margin: 0 0 8px 0;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .feature-item p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .demo-footer {
+            text-align: center;
+            color: white;
+            margin-top: 40px;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .demo-header h1 {
+                font-size: 2rem;
+            }
+
+            .component-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-header">
+        <h1>🤖 Chatbot Design System</h1>
+        <p>Modern, Unified, and Beautiful Chatbot Components</p>
+    </div>
+
+    <div class="demo-section">
+        <h2>✨ New Features</h2>
+        <div class="features-list">
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>🎨 Unified Design System</h4>
+                    <p>Consistent colors, typography, and spacing across all components</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🌙 Dark/Light Mode Support</h4>
+                    <p>Automatic theme switching with CSS custom properties</p>
+                </div>
+                <div class="feature-item">
+                    <h4>📱 Responsive Design</h4>
+                    <p>Optimized for all screen sizes and devices</p>
+                </div>
+                <div class="feature-item">
+                    <h4>♿ Accessibility First</h4>
+                    <p>WCAG compliant with proper focus management</p>
+                </div>
+                <div class="feature-item">
+                    <h4>🎭 Theme Customization</h4>
+                    <p>Multiple themes: Travel, Modern, ChatGPT, Amazon</p>
+                </div>
+                <div class="feature-item">
+                    <h4>⚡ Smooth Animations</h4>
+                    <p>Fluid transitions and micro-interactions</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>🎭 Available Themes</h2>
+        <div class="theme-buttons">
+            <button class="theme-btn active" onclick="switchTheme('modern')">Modern</button>
+            <button class="theme-btn" onclick="switchTheme('travel')">Travel</button>
+            <button class="theme-btn" onclick="switchTheme('chatgpt')">ChatGPT</button>
+            <button class="theme-btn" onclick="switchTheme('amazon')">Amazon</button>
+        </div>
+
+        <div class="component-grid">
+            <div class="component-card">
+                <h3 class="component-title">Modern Chat Widget</h3>
+                <p class="component-description">Clean, professional design with purple gradient theme</p>
+                <div id="modern-widget-container"></div>
+            </div>
+
+            <div class="component-card">
+                <h3 class="component-title">Travel Chat Widget</h3>
+                <p class="component-description">Travel-themed design with blue gradients</p>
+                <div id="travel-widget-container"></div>
+            </div>
+
+            <div class="component-card">
+                <h3 class="component-title">ChatGPT Style Widget</h3>
+                <p class="component-description">ChatGPT-inspired design with green theme</p>
+                <div id="chatgpt-widget-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-section">
+        <h2>🚀 Implementation</h2>
+        <div class="features-list">
+            <h3>How to Use the New Design System</h3>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h4>1. Import CSS</h4>
+                    <p>Include the design system CSS file in your component</p>
+                </div>
+                <div class="feature-item">
+                    <h4>2. Add Theme</h4>
+                    <p>Use data-theme attribute to apply different themes</p>
+                </div>
+                <div class="feature-item">
+                    <h4>3. Use CSS Classes</h4>
+                    <p>Replace inline styles with semantic CSS classes</p>
+                </div>
+                <div class="feature-item">
+                    <h4>4. Customize</h4>
+                    <p>Override CSS custom properties for brand customization</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-footer">
+        <p>Built with ❤️ using modern web technologies</p>
+    </div>
+
+    <script type="module">
+        import ModernChatWidget from '../src/components/ModernChatWidgetUpdated.tsx';
+        import EnhancedChatbotWidget from '../src/components/EnhancedChatbotWidget.tsx';
+        import ChatGPTStyleWidget from '../src/components/ChatGPTStyleWidgetUpdated.tsx';
+
+        // This would normally be handled by your build system
+        console.log('Chatbot Design System Demo Loaded');
+    </script>
+</body>
+</html>

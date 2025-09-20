@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Enhanced Chatbot with Learning & Plugin System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .demo-container {
+            max-width: 1200px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .demo-header {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .demo-header h1 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .demo-header p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #667eea;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .feature-card .icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            color: #555;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .feature-list li::before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+            color: #28a745;
+        }
+
+        .chatbot-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chatbot-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chatbot-title h3 {
+            margin: 0;
+            font-size: 1.4rem;
+        }
+
+        .chatbot-title p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .chatbot-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .stats-panel, .plugin-panel {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .stats-panel h4, .plugin-panel h4 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 1.1rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .plugin-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .plugin-item {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .plugin-info h5 {
+            margin: 0 0 5px 0;
+            color: #333;
+        }
+
+        .plugin-info p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .plugin-status {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .plugin-status.active {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .plugin-status.inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .plugin-status.error {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .plugin-toggle {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #fafbfc;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            position: relative;
+        }
+
+        .message.user .message-bubble {
+            background: #667eea;
+            color: white;
+        }
+
+        .message.bot .message-bubble {
+            background: white;
+            color: #333;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+            font-size: 0.8rem;
+        }
+
+        .timestamp {
+            color: #999;
+        }
+
+        .rating-controls {
+            display: flex;
+            gap: 5px;
+        }
+
+        .rating-controls button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            opacity: 0.6;
+            transition: opacity 0.3s;
+        }
+
+        .rating-controls button:hover {
+            opacity: 1;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 10px;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #667eea;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.4;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+
+        .chatbot-input-area {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #eee;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .input-container input {
+            flex: 1;
+            padding: 12px 18px;
+            border: 2px solid #e1e5e9;
+            border-radius: 25px;
+            outline: none;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .input-container input:focus {
+            border-color: #667eea;
+        }
+
+        .input-container button {
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .input-container button:hover {
+            background: #5a6fd8;
+        }
+
+        .input-container button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .input-hints {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .reset-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        .reset-btn:hover {
+            background: #c82333;
+        }
+
+        .instructions {
+            background: #e7f3ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .instructions h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            .demo-container {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+
+            .demo-header h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .message-bubble {
+                max-width: 85%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="demo-header">
+            <h1>🚀 AI-Enhanced Chatbot</h1>
+            <p>Experience the future of conversational AI with self-learning capabilities and extensible plugin architecture</p>
+        </div>
+
+        <div class="instructions">
+            <h3>📋 How to Test the Features:</h3>
+            <ol>
+                <li><strong>AI Learning:</strong> Rate bot responses using 😊😐😞 buttons to teach the AI your preferences</li>
+                <li><strong>Plugin Commands:</strong> Try these commands in the chat:
+                    <ul>
+                        <li><code>/greet</code> - Get a personalized greeting</li>
+                        <li><code>/joke</code> - Get a random joke</li>
+                        <li><code>/funfact</code> - Learn something interesting</li>
+                        <li><code>/magic</code> - Experience some magic!</li>
+                    </ul>
+                </li>
+                <li><strong>Plugin Management:</strong> Use the 🔌 button to enable/disable plugins</li>
+                <li><strong>Learning Stats:</strong> Click 📊 to view AI learning progress and statistics</li>
+            </ol>
+        </div>
+
+        <div class="feature-card">
+            <div class="icon">🧠</div>
+            <h3>AI Learning System</h3>
+            <ul className="feature-list">
+                <li>Self-improving responses based on user feedback</li>
+                <li>Contextual understanding and pattern recognition</li>
+                <li>User preference learning and adaptation</li>
+                <li>Sentiment analysis and response optimization</li>
+                <li>Continuous learning from interactions</li>
+                <li>Personalized response styles</li>
+            </ul>
+        </div>
+
+        <div class="feature-card">
+            <div class="icon">🔌</div>
+            <h3>Plugin System</h3>
+            <ul className="feature-list">
+                <li>Extensible architecture for custom features</li>
+                <li>Command-based plugin interactions</li>
+                <li>Event-driven hook system</li>
+                <li>Permission-based security model</li>
+                <li>Dynamic plugin loading and management</li>
+                <li>Cross-plugin communication</li>
+            </ul>
+        </div>
+
+        <div class="chatbot-container">
+            <div class="chatbot-header">
+                <div class="chatbot-title">
+                    <h3>🤖 AI-Enhanced Chatbot</h3>
+                    <p>With Learning & Plugin System</p>
+                </div>
+                <div class="chatbot-controls">
+                    <button class="control-btn" onclick="toggleStats()" title="Show AI Learning Stats">📊</button>
+                    <button class="control-btn" onclick="togglePlugins()" title="Show Plugin Panel">🔌</button>
+                </div>
+            </div>
+
+            <div id="statsPanel" class="stats-panel" style="display: none;">
+                <h4>🧠 AI Learning Statistics</h4>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-value" id="totalInteractions">0</span>
+                        <span class="stat-label">Interactions</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="totalPatterns">0</span>
+                        <span class="stat-label">Patterns</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="totalUsers">0</span>
+                        <span class="stat-label">Users</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="avgSatisfaction">0%</span>
+                        <span class="stat-label">Satisfaction</span>
+                    </div>
+                </div>
+                <button class="reset-btn" onclick="resetLearning()">Reset Learning Data</button>
+            </div>
+
+            <div id="pluginPanel" class="plugin-panel" style="display: none;">
+                <h4>🔌 Plugin Management</h4>
+                <div class="plugin-list" id="pluginList">
+                    <!-- Plugins will be populated here -->
+                </div>
+            </div>
+
+            <div class="chatbot-messages" id="chatMessages">
+                <div class="message bot">
+                    <div class="message-bubble">
+                        <p>Hello! I'm your AI-enhanced chatbot with learning capabilities and plugin support! 🤖✨</p>
+                        <div class="message-meta">
+                            <span class="timestamp">Just now</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chatbot-input-area">
+                <div class="input-container">
+                    <input type="text" id="messageInput" placeholder="Type your message or use /greet, /joke, /funfact..." onkeypress="handleKeyPress(event)">
+                    <button onclick="sendMessage()" id="sendButton">Send</button>
+                </div>
+                <div class="input-hints">
+                    <span>💡 Try: /greet, /joke, /funfact, /magic</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="icon">✨</div>
+            <h3>Key Features Demonstrated</h3>
+            <ul className="feature-list">
+                <li>Real-time AI learning from user feedback</li>
+                <li>Plugin-based command system</li>
+                <li>Dynamic plugin management interface</li>
+                <li>Learning statistics and analytics</li>
+                <li>Contextual response adaptation</li>
+                <li>Extensible architecture for future enhancements</li>
+            </ul>
+        </div>
+    </div>
+
+    <script type="module">
+        import { aiLearningEngine } from './src/systems/AILearningSystemFixed.js';
+        import { pluginManager } from './src/systems/PluginSystemFixed.js';
+
+        // Make functions available globally
+        window.aiLearningEngine = aiLearningEngine;
+        window.pluginManager = pluginManager;
+
+        // Initialize the demo
+        async function initializeDemo() {
+            try {
+                // Initialize plugin system
+                await pluginManager.initializePluginSystem();
+
+                // Install example plugins
+                await installExamplePlugins();
+
+                // Update UI
+                updatePluginList();
+                updateLearningStats();
+
+                console.log('✅ Demo initialized successfully');
+            } catch (error) {
+                console.error('❌ Failed to initialize demo:', error);
+            }
+        }
+
+        async function installExamplePlugins() {
+            // Greeting Plugin
+            const greetingPluginManifest = {
+                id: 'greeting-plugin',
+                name: 'Greeting Plugin',
+                version: '1.0.0',
+                description: 'Enhances greetings and farewells',
+                author: 'Chatbot Team',
+                permissions: ['basic'],
+                dependencies: ['core'],
+                entryPoint: 'GreetingPlugin',
+                config: {}
+            };
+
+            const greetingPluginCode = \`
+            class GreetingPlugin {
+                constructor(context) {
+                    this.context = context;
+                    this.api = context.api;
+                }
+
+                async onLoad(context) {
+                    this.api.log('info', 'Greeting plugin loaded');
+
+                    this.api.registerCommand('/greet', this.handleGreet.bind(this));
+                    this.api.registerCommand('/bye', this.handleBye.bind(this));
+                    this.api.registerHook('beforeMessage', this.onBeforeMessage.bind(this));
+                }
+
+                async handleGreet(args, context) {
+                    const timeOfDay = new Date().getHours();
+                    let greeting = '';
+
+                    if (timeOfDay < 12) greeting = 'Good morning! ';
+                    else if (timeOfDay < 17) greeting = 'Good afternoon! ';
+                    else greeting = 'Good evening! ';
+
+                    this.api.sendMessage(greeting + 'How can I help you today? 🌅');
+                }
+
+                async handleBye(args, context) {
+                    this.api.sendMessage('Goodbye! Have a wonderful day! 👋');
+                }
+
+                async onBeforeMessage(data) {
+                    if (data.message.toLowerCase().includes('hello') ||
+                        data.message.toLowerCase().includes('hi')) {
+                        data.context = data.context || [];
+                        data.context.push('greeting');
+                    }
+                }
+
+                async onUnload() {
+                    this.api.log('info', 'Greeting plugin unloaded');
+                }
+            }
+            window.PluginClass = GreetingPlugin;
+            \`;
+
+            await pluginManager.installPlugin(greetingPluginManifest, greetingPluginCode);
+
+            // Fun Plugin
+            const funPluginManifest = {
+                id: 'fun-plugin',
+                name: 'Fun Plugin',
+                version: '1.0.0',
+                description: 'Adds fun features and jokes',
+                author: 'Chatbot Team',
+                permissions: ['basic'],
+                dependencies: ['core'],
+                entryPoint: 'FunPlugin',
+                config: {}
+            };
+
+            const funPluginCode = \`
+            class FunPlugin {
+                constructor(context) {
+                    this.context = context;
+                    this.api = context.api;
+                    this.jokes = [
+                        "Why don't scientists trust atoms? Because they make up everything! ⚛️",
+                        "What do you call fake spaghetti? An impasta! 🍝",
+                        "Why did the scarecrow win an award? Because he was outstanding in his field! 🌾"
+                    ];
+                }
+
+                async onLoad(context) {
+                    this.api.log('info', 'Fun plugin loaded');
+
+                    this.api.registerCommand('/joke', this.handleJoke.bind(this));
+                    this.api.registerCommand('/funfact', this.handleFunFact.bind(this));
+                    this.api.registerCommand('/magic', this.handleMagic.bind(this));
+                }
+
+                async handleJoke(args, context) {
+                    const randomJoke = this.jokes[Math.floor(Math.random() * this.jokes.length)];
+                    this.api.sendMessage(randomJoke);
+                }
+
+                async handleFunFact(args, context) {
+                    const facts = [
+                        "A group of flamingos is called a 'flamboyance'! 🦩",
+                        "Bananas are berries, but strawberries aren't! 🍌🍓",
+                        "Octopuses have three hearts! 🐙❤️❤️❤️"
+                    ];
+                    const randomFact = facts[Math.floor(Math.random() * facts.length)];
+                    this.api.sendMessage("Fun fact: " + randomFact);
+                }
+
+                async handleMagic(args, context) {
+                    const tricks = [
+                        "🎩 Poof! Your message has been enchanted! ✨",
+                        "🔮 I see great things in your future... like more chatting! 💬",
+                        "🧙‍♂️ Abracadabra! Something magical happened! 🌟"
+                    ];
+                    const randomTrick = tricks[Math.floor(Math.random() * tricks.length)];
+                    this.api.sendMessage(randomTrick);
+                }
+
+                async onUnload() {
+                    this.api.log('info', 'Fun plugin unloaded');
+                }
+            }
+            window.PluginClass = FunPlugin;
+            \`;
+
+            await pluginManager.installPlugin(funPluginManifest, funPluginCode);
+        }
+
+        function updatePluginList() {
+            const pluginList = document.getElementById('pluginList');
+            const plugins = pluginManager.getInstalledPlugins();
+
+            pluginList.innerHTML = '';
+
+            plugins.forEach(plugin => {
+                const pluginItem = document.createElement('div');
+                pluginItem.className = 'plugin-item';
+
+                pluginItem.innerHTML = \`
+                    <div class="plugin-info">
+                        <h5>\${plugin.manifest.name}</h5>
+                        <p>\${plugin.manifest.description}</p>
+                        <span class="plugin-status \${plugin.status}">\${plugin.status}</span>
+                    </div>
+                    <button class="plugin-toggle" onclick="togglePlugin('\${plugin.manifest.id}')">
+                        \${plugin.status === 'active' ? 'Disable' : 'Enable'}
+                    </button>
+                \`;
+
+                pluginList.appendChild(pluginItem);
+            });
+        }
+
+        function updateLearningStats() {
+            const stats = aiLearningEngine.getLearningStats();
+
+            document.getElementById('totalInteractions').textContent = stats.totalInteractions || 0;
+            document.getElementById('totalPatterns').textContent = stats.totalPatterns || 0;
+            document.getElementById('totalUsers').textContent = stats.totalUsers || 0;
+            document.getElementById('avgSatisfaction').textContent =
+                stats.averageSatisfaction ? Math.round(stats.averageSatisfaction * 100) + '%' : '0%';
+        }
+
+        async function togglePlugin(pluginId) {
+            const plugins = pluginManager.getInstalledPlugins();
+            const plugin = plugins.find(p => p.manifest.id === pluginId);
+
+            if (plugin.status === 'active') {
+                await pluginManager.disablePlugin(pluginId);
+            } else {
+                await pluginManager.enablePlugin(pluginId);
+            }
+
+            updatePluginList();
+        }
+
+        async function resetLearning() {
+            await aiLearningEngine.resetLearningData();
+            updateLearningStats();
+
+            addMessage({
+                text: "AI learning data has been reset! I'll start learning from scratch. 🧹",
+                sender: 'bot',
+                context: ['system']
+            });
+        }
+
+        function toggleStats() {
+            const panel = document.getElementById('statsPanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function togglePlugins() {
+            const panel = document.getElementById('pluginPanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function addMessage(message) {
+            const chatMessages = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = \`message \${message.sender}\`;
+
+            const timestamp = new Date().toLocaleTimeString();
+
+            messageDiv.innerHTML = \`
+                <div class="message-bubble">
+                    <p>\${message.text}</p>
+                    <div class="message-meta">
+                        <span class="timestamp">\${timestamp}</span>
+                        \${message.sender === 'bot' ? \`
+                            <div class="rating-controls">
+                                <button onclick="rateMessage('\${message.id}', 1)">😞</button>
+                                <button onclick="rateMessage('\${message.id}', 3)">😐</button>
+                                <button onclick="rateMessage('\${message.id}', 5)">😊</button>
+                            </div>
+                        \` : ''}
+                    </div>
+                </div>
+            \`;
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const button = document.getElementById('sendButton');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // Add user message
+            addMessage({
+                id: Date.now().toString(),
+                text: message,
+                sender: 'user',
+                context: ['user_input']
+            });
+
+            input.value = '';
+            button.disabled = true;
+            button.textContent = '⏳';
+
+            try {
+                // Check for plugin commands
+                if (message.startsWith('/')) {
+                    await handlePluginCommand(message);
+                } else {
+                    // Generate AI response
+                    const context = ['general_chat'];
+                    const response = await aiLearningEngine.generateImprovedResponse(
+                        'demo-user',
+                        message,
+                        context
+                    );
+
+                    addMessage({
+                        id: (Date.now() + 1).toString(),
+                        text: response,
+                        sender: 'bot',
+                        context: context
+                    });
+
+                    // Record interaction for learning
+                    await aiLearningEngine.recordInteraction({
+                        userId: 'demo-user',
+                        message: message,
+                        response: response,
+                        context: context,
+                        sentiment: 'neutral',
+                        responseTime: 100
+                    });
+
+                    updateLearningStats();
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                addMessage({
+                    id: (Date.now() + 1).toString(),
+                    text: "Sorry, I encountered an error. Please try again! 😅",
+                    sender: 'bot',
+                    context: ['error']
+                });
+            }
+
+            button.disabled = false;
+            button.textContent = 'Send';
+        }
+
+        async function handlePluginCommand(command) {
+            try {
+                const context = {
+                    chatbot: { version: '1.0.0' },
+                    user: { id: 'demo-user', permissions: ['basic'] },
+                    config: {},
+                    api: pluginManager.createPluginAPI('command-handler'),
+                    events: pluginManager.eventEmitter
+                };
+
+                await pluginManager.executeCommand(command, [], context);
+            } catch (error) {
+                addMessage({
+                    id: (Date.now() + 1).toString(),
+                    text: \`Plugin command "\${command}" not found. Type /help for available commands! 🤔\`,
+                    sender: 'bot',
+                    context: ['plugin_error']
+                });
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        async function rateMessage(messageId, rating) {
+            // Record rating for AI learning
+            const messages = document.querySelectorAll('.message');
+            const messageElement = Array.from(messages).find(m => m.querySelector('.message-bubble').textContent.includes(messageId));
+
+            if (messageElement) {
+                const messageText = messageElement.querySelector('p').textContent;
+
+                await aiLearningEngine.recordInteraction({
+                    userId: 'demo-user',
+                    message: messageText,
+                    response: messageText,
+                    rating: rating,
+                    context: ['rating'],
+                    sentiment: rating > 3 ? 'positive' : rating < 3 ? 'negative' : 'neutral',
+                    responseTime: 100
+                });
+
+                updateLearningStats();
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeDemo);
+    </script>
+</body>
+</html>

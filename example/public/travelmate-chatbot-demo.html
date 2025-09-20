@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TravelMate Chatbot Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .demo-header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .demo-header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .demo-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+        }
+
+        .demo-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 1200px;
+            width: 100%;
+            min-height: 700px;
+            position: relative;
+        }
+
+        .demo-content {
+            padding: 40px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .demo-content h2 {
+            font-size: 1.8rem;
+            color: #1e293b;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .demo-content p {
+            color: #64748b;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            max-width: 500px;
+            margin-bottom: 30px;
+        }
+
+        .demo-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .feature-card {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .feature-card h3 {
+            color: #1e293b;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-card p {
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        .demo-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .demo-header h1 {
+                font-size: 2rem;
+            }
+
+            .demo-content {
+                padding: 20px;
+            }
+
+            .demo-features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-header">
+        <h1>✈️ TravelMate Chatbot</h1>
+        <p>Experience the next generation of travel assistance with our AI-powered chatbot featuring the new design system</p>
+    </div>
+
+    <div class="demo-container">
+        <div class="demo-content">
+            <h2>Travel Planning Made Easy</h2>
+            <p>Our TravelMate chatbot combines cutting-edge AI technology with a beautiful, intuitive interface to help you plan your perfect trip.</p>
+
+            <div class="demo-features">
+                <div class="feature-card">
+                    <h3>Smart Travel Planning</h3>
+                    <p>Get personalized recommendations for destinations, accommodations, and activities based on your preferences.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Real-time Assistance</h3>
+                    <p>Receive instant answers to your travel questions with our advanced AI assistant available 24/7.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Modern Design System</h3>
+                    <p>Experience a sleek, responsive interface built with our comprehensive design system for optimal user experience.</p>
+                </div>
+            </div>
+
+            <div class="demo-footer">
+                <p>Click the chat button in the bottom right to start your travel planning journey!</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="root"></div>
+
+    <script type="module" src="/src/indexTravelMate.tsx"></script>
+</body>
+</html>
